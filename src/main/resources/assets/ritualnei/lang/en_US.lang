@@ -1,0 +1,12 @@
+ritualnei.title=Circle Magic
+ritualnei.anycircles=Any
+ritualnei.requireditems=Required items:
+ritualnei.optionalitems=Optional items:
+ritualnei.power=Power: %d
+ritualnei.sacrifice=Sacrifice:
+ritualnei.conditions=Must be:
+ritualnei.conditions.only_in_rain=In rain
+ritualnei.conditions.only_at_night=At night
+ritualnei.conditions.only_at_day=During day
+ritualnei.conditions.only_in_strom=In storm
+ritualnei.conditions.only_overworld=In overworld

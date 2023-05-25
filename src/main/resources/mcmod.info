@@ -1,0 +1,16 @@
+{
+	"modListVersion": 2,
+	"modList": [{
+		"modid": "${modId}",
+		"name": "${modName}",
+		"description": "NEI plugin for Witchery rituals",
+		"version": "${modVersion}",
+		"mcversion": "${minecraftVersion}",
+		"url": "",
+		"updateUrl": "",
+		"authorList": ["fall"],
+		"credits": "",
+		"logoFile": "",
+		"useDependencyInformation": false
+	}]
+}
