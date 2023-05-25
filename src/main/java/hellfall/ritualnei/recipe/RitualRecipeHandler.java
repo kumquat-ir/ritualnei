@@ -91,6 +91,8 @@ public class RitualRecipeHandler extends TemplateRecipeHandler {
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
         for (RitualRecipe recipe : RitualRecipes.generateRecipes(false)) {
+            boolean found = false;
+
             // check if the item can represent some type of circle:
             // chalk matches any rituals with any circles drawn with it (golden chalk matches all)
             // non-empty talismans match any rituals that take exactly the circles contained within
@@ -108,11 +110,25 @@ public class RitualRecipeHandler extends TemplateRecipeHandler {
                 continue;
             }
 
-            for (ItemStack stack : recipe.items) {
-                if (NEIClientUtils.areStacksSameType(ingredient, stack)) {
-                    arecipes.add(new CachedRitualRecipe(recipe));
-                    break;
+            if (recipe.items != null) {
+                for (ItemStack stack : recipe.items) {
+                    if (NEIClientUtils.areStacksSameType(ingredient, stack)) {
+                        found = true;
+                        break;
+                    }
                 }
+            }
+            if (recipe.optionalItems != null) {
+                for (ItemStack stack : recipe.optionalItems) {
+                    if (NEIClientUtils.areStacksSameType(ingredient, stack)) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            if (found) {
+                arecipes.add(new CachedRitualRecipe(recipe));
             }
         }
     }
