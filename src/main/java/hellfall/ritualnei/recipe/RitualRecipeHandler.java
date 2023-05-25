@@ -64,9 +64,9 @@ public class RitualRecipeHandler extends TemplateRecipeHandler {
                     ingredients.add(new PositionedStack(stack, 20 * offset + 3, 19));
                     offset++;
                 }
+                offset = 0;
             }
             if (recipe.optionalItems != null) {
-                offset = 0;
                 for (ItemStack stack : recipe.optionalItems) {
                     ingredients.add(new PositionedStack(stack, 20 * offset + 3, 48));
                     offset++;
@@ -91,8 +91,13 @@ public class RitualRecipeHandler extends TemplateRecipeHandler {
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
         for (RitualRecipe recipe : RitualRecipes.generateRecipes(false)) {
-            if (NEIClientUtils.areStacksSameType(ingredient, new ItemStack(Witchery.Items.CHALK_RITUAL))
-                && recipe.hasCircleOf(CircleType.RITUAL)
+            // check if the item can represent some type of circle:
+            // chalk matches any rituals with any circles drawn with it (golden chalk matches all)
+            // non-empty talismans match any rituals that take exactly the circles contained within
+            // rituals that take any circles match only golden chalk but every non-empty talisman
+            if (NEIClientUtils.areStacksSameType(ingredient, new ItemStack(Witchery.Items.CHALK_GOLDEN))
+                || NEIClientUtils.areStacksSameType(ingredient, new ItemStack(Witchery.Items.CHALK_RITUAL))
+                    && recipe.hasCircleOf(CircleType.RITUAL)
                 || NEIClientUtils.areStacksSameType(ingredient, new ItemStack(Witchery.Items.CHALK_OTHERWHERE))
                     && recipe.hasCircleOf(CircleType.OTHERWHERE)
                 || NEIClientUtils.areStacksSameType(ingredient, new ItemStack(Witchery.Items.CHALK_INFERNAL))
@@ -102,6 +107,7 @@ public class RitualRecipeHandler extends TemplateRecipeHandler {
                 arecipes.add(new CachedRitualRecipe(recipe));
                 continue;
             }
+
             for (ItemStack stack : recipe.items) {
                 if (NEIClientUtils.areStacksSameType(ingredient, stack)) {
                     arecipes.add(new CachedRitualRecipe(recipe));
@@ -132,6 +138,7 @@ public class RitualRecipeHandler extends TemplateRecipeHandler {
     public void drawExtras(int recipeIndex) {
         CachedRitualRecipe recipe = (CachedRitualRecipe) arecipes.get(recipeIndex);
         String ritualName = StatCollector.translateToLocal(recipe.recipe.name);
+        // the lang values here are for witchery's books, so they contain descriptions in them. strip those out.
         String realRitualName = ritualName.substring(0, ritualName.indexOf("{r"));
 
         drawCircles(recipe.recipe.circles);
@@ -185,6 +192,7 @@ public class RitualRecipeHandler extends TemplateRecipeHandler {
 
     private void drawCircles(CircleType[] circles) {
         if (circles[0] == CircleType.NONE && circles[1] == CircleType.NONE && circles[2] == CircleType.NONE) {
+            // the right half of each type of circle, each a different size
             GuiDraw.changeTexture(CIRCLE_WHITE_SMALL);
             GuiDraw.drawTexturedModalRect(80 + 39, 43, 39, 0, 45, 84);
             GuiDraw.changeTexture(CIRCLE_BLUE_MEDIUM);
@@ -243,7 +251,9 @@ public class RitualRecipeHandler extends TemplateRecipeHandler {
 
     @Override
     public int recipiesPerPage() {
-        // yes,
+        // yes, this is different than the value provided by IMC.
+        // GTNH NEI prioritizes IMC, and 2 is the correct value for it
+        // base NEI doesnt know about the IMC, and 1 is the correct value for it
         return 1;
     }
 }

@@ -24,8 +24,9 @@ public class CommonProxy {
                     .build(),
                 "image");
         } catch (Throwable t) {
-            // ignore, non-GTNH NEI will error here
-            // if this is GTNH NEI and it errors, it will fall back to golden chalk item
+            // ignore
+            // non-GTNH NEI *will* error here with a NoClassDefFound, but this code is intended to do nothing if so
+            // if this is GTNH NEI and it errors somehow, it will fall back to golden chalk item as the icon
         }
     }
 }

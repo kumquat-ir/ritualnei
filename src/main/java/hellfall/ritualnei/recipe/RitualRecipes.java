@@ -35,6 +35,11 @@ public class RitualRecipes {
         public CircleType[] circles;
         EnumSet<RitualTraits> traits;
 
+        // limitations (all do not matter for vanilla witchery):
+        // only one living sacrifice name displays
+        // only two traits display
+        // only 8 items display
+        // only 3 optional items display
         public RitualRecipe(RiteRegistry.Ritual ritual) {
             name = ritual.getUnlocalizedName();
             traits = ReflectionHelper.getPrivateValue(RiteRegistry.Ritual.class, ritual, "traits");
